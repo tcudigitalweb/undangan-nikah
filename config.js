@@ -14,11 +14,12 @@ const DATA = {
   galeri: [
     "assets/foto/01.jpg",
     "assets/foto/02.jpg",
-    "assets/foto/03.jpg"
-    "assets/foto/04.jpg"
-    "assets/foto/05.jpg"
+    "assets/foto/03.jpg",
+    "assets/foto/04.jpg",
+    "assets/foto/05.jpg",
     "assets/foto/06.jpg"
   ],
 
   countdown: "2026-01-30T10:00:00"
 };
+
