@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Undangan Pernikahan</title>
 
-  <!-- FONT -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 
   <style>
-    :root {
+    :root{
       --primary:#8b5e3c;
       --secondary:#f5eee6;
       --dark:#3a2c23;
     }
-
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family:'Poppins',sans-serif;
       background:var(--secondary);
       color:var(--dark);
-      overflow-x:hidden;
     }
 
     header{
       min-height:100vh;
-      background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),url('https://images.unsplash.com/photo-1523438885200-e635ba2c371e');
+      background:
+        linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),
+        url('assets/img/cover.jpg');
       background-size:cover;
       background-position:center;
       display:flex;
@@ -36,14 +35,20 @@
       color:#fff;
       padding:24px;
     }
-
     header h1{
       font-family:'Playfair Display',serif;
       font-size:42px;
       margin:12px 0;
     }
-
-    header p{font-size:15px}
+    .couple-photo{
+      width:160px;
+      height:160px;
+      object-fit:cover;
+      border-radius:50%;
+      border:4px solid rgba(255,255,255,.85);
+      margin-bottom:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
 
     section{
       max-width:760px;
@@ -51,7 +56,6 @@
       padding:60px 20px;
       text-align:center;
     }
-
     .card{
       background:#fff;
       border-radius:22px;
@@ -59,47 +63,52 @@
       box-shadow:0 15px 40px rgba(0,0,0,.12);
       margin-bottom:40px;
     }
-
     h2{
       font-family:'Playfair Display',serif;
       font-size:28px;
       color:var(--primary);
       margin-bottom:16px;
     }
-
-    .info p{margin:6px 0}
-
     .btn{
       display:inline-block;
       margin-top:18px;
       padding:12px 30px;
       background:var(--primary);
       color:#fff;
-      text-decoration:none;
       border-radius:30px;
       font-size:14px;
+      border:none;
+      cursor:pointer;
     }
 
     .countdown{
       display:flex;
-      justify-content:space-between;
+      gap:10px;
       margin-top:24px;
     }
     .time{
-      width:23%;
+      flex:1;
       background:var(--secondary);
       border-radius:16px;
       padding:12px;
     }
-    .time h3{margin:0;color:var(--primary)}
-    .time span{font-size:12px}
 
-    .slider img{
-      width:100%;
+    .slider{
+      position:relative;
+      height:260px;
+      overflow:hidden;
       border-radius:18px;
-      display:none;
     }
-    .slider img.active{display:block}
+    .slider img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:0;
+      transition:opacity .8s ease;
+    }
+    .slider img.active{opacity:1}
 
     input,textarea{
       width:100%;
@@ -116,130 +125,56 @@
       font-size:13px;
       color:#777;
     }
-
     audio{display:none}
   </style>
 </head>
 <body>
 
-<!-- MUSIK -->
-<audio autoplay loop>
-  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+<audio id="bgMusic" loop>
+  <source src="assets/music/wedding.mp3" type="audio/mpeg">
 </audio>
 
-<!-- HERO -->
 <header>
   <div>
+    <img src="assets/img/couple.jpg" class="couple-photo" alt="Pasangan">
     <p>Undangan Pernikahan</p>
-    <h1 id="namaPasangan">Nama & Nama</h1>
+    <h1 id="namaPasangan"></h1>
     <p id="namaTamu">Kepada Yth. Bapak/Ibu</p>
+    <button class="btn" id="playMusic">Buka Undangan</button>
   </div>
 </header>
 
-<!-- PEMBUKA -->
 <section>
+
   <div class="card">
-    <h2>Assalamu'alaikum Wr. Wb.</h2>
-    <p>Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan pernikahan putra-putri kami.</p>
-  </div>
-
-  <!-- DETAIL -->
-  <div class="card info">
     <h2>Akad & Resepsi</h2>
-    <p><strong>Hari / Tanggal</strong><br><span id="tanggal"></span></p>
-    <p><strong>Waktu</strong><br><span id="waktu"></span></p>
-    <p><strong>Tempat</strong><br><span id="tempat"></span></p>
+    <p><span id="tanggal"></span></p>
+    <p><span id="waktu"></span></p>
+    <p><span id="tempat"></span></p>
     <p id="alamat"></p>
-    <a class="btn" id="maps" target="_blank">Buka Google Maps</a>
+    <a class="btn" id="maps" target="_blank">Buka Maps</a>
   </div>
 
-  <!-- COUNTDOWN -->
   <div class="card">
     <h2>Menuju Hari Bahagia</h2>
     <div class="countdown">
-      <div class="time"><h3 id="d">0</h3><span>Hari</span></div>
-      <div class="time"><h3 id="h">0</h3><span>Jam</span></div>
-      <div class="time"><h3 id="m">0</h3><span>Menit</span></div>
-      <div class="time"><h3 id="s">0</h3><span>Detik</span></div>
+      <div class="time"><h3 id="d">0</h3>Hari</div>
+      <div class="time"><h3 id="h">0</h3>Jam</div>
+      <div class="time"><h3 id="m">0</h3>Menit</div>
+      <div class="time"><h3 id="s">0</h3>Detik</div>
     </div>
   </div>
 
-  <!-- GALERI -->
   <div class="card">
-    <h2>Galeri Foto</h2>
+    <h2>Galeri Memories</h2>
     <div class="slider" id="galeri"></div>
   </div>
 
-  <!-- UCAPAN -->
-  <div class="card">
-    <h2>Ucapan & Doa</h2>
-    <input id="namaUcapan" placeholder="Nama">
-    <textarea id="pesanUcapan" placeholder="Ucapan"></textarea>
-    <a class="btn" onclick="kirimUcapan()">Kirim Ucapan</a>
-    <div id="listUcapan" style="margin-top:16px;text-align:left"></div>
-  </div>
-
-  <!-- AMPLOP -->
-  <div class="card">
-    <h2>Amplop Digital</h2>
-    <p id="rekening"></p>
-  </div>
 </section>
 
-<footer>
-  <p>Terima kasih atas doa & restunya</p>
-</footer>
+<footer>Terima kasih atas doa & restunya</footer>
 
-<script src="config.js"></script>
-<script>
-  // ISI DATA DARI CONFIG
-  document.getElementById('namaPasangan').innerText = DATA.pria + ' & ' + DATA.wanita;
-  document.getElementById('tanggal').innerText = DATA.tanggal;
-  document.getElementById('waktu').innerText = DATA.waktu;
-  document.getElementById('tempat').innerText = DATA.tempat;
-  document.getElementById('alamat').innerText = DATA.alamat;
-  document.getElementById('rekening').innerText = DATA.rekening;
-  document.getElementById('maps').href = DATA.maps;
-
-  // Nama tamu dari URL
-  const p = new URLSearchParams(window.location.search);
-  if(p.get('to')) document.getElementById('namaTamu').innerText = 'Kepada Yth. ' + decodeURIComponent(p.get('to'));
-
-  // GALERI
-  const gal = document.getElementById('galeri');
-  DATA.galeri.forEach((src,i)=>{
-    const img=document.createElement('img');
-    img.src=src;
-    if(i===0) img.classList.add('active');
-    gal.appendChild(img);
-  });
-  let idx=0;
-  setInterval(()=>{
-    const imgs=document.querySelectorAll('.slider img');
-    imgs.forEach(i=>i.classList.remove('active'));
-    idx=(idx+1)%imgs.length;
-    imgs[idx].classList.add('active');
-  },3000);
-
-  // COUNTDOWN
-  const weddingDate = new Date(DATA.countdown || '2026-01-12T10:00:00').getTime();
-  setInterval(()=>{
-    const now=new Date().getTime();
-    const d=weddingDate-now;
-    if(d<0) return;
-    document.getElementById('d').innerText=Math.floor(d/(1000*60*60*24));
-    document.getElementById('h').innerText=Math.floor((d%(1000*60*60*24))/(1000*60*60));
-    document.getElementById('m').innerText=Math.floor((d%(1000*60*60))/(1000*60));
-    document.getElementById('s').innerText=Math.floor((d%(1000*60))/1000);
-  },1000);
-
-  // UCAPAN (LOCAL)
-  function kirimUcapan(){
-    if(!namaUcapan.value||!pesanUcapan.value) return alert('Lengkapi data');
-    listUcapan.innerHTML+=`<p><strong>${namaUcapan.value}</strong><br>${pesanUcapan.value}</p>`;
-    namaUcapan.value=pesanUcapan.value='';
-  }
-</script>
-
+<!-- JS TERPISAH -->
+<script src="assets/js/main.js" defer></script>
 </body>
 </html>
