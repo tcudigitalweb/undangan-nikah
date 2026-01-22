@@ -35,10 +35,31 @@ if (q.get('to')) {
 }
 
 /* Musik */
-$('playMusic').onclick = () => {
-  $('bgMusic').play();
-  $('playMusic').style.display = 'none';
-};
+document.addEventListener('DOMContentLoaded', () => {
+
+  const music = document.getElementById('bgMusic');
+  const playBtn = document.getElementById('playMusic');
+
+  if (!music || !playBtn) {
+    console.error('Audio / tombol tidak ditemukan');
+    return;
+  }
+
+  playBtn.addEventListener('click', () => {
+    music.currentTime = 0;
+
+    music.play()
+      .then(() => {
+        playBtn.style.display = 'none';
+      })
+      .catch(err => {
+        console.log('Gagal play:', err);
+        alert('Tap sekali lagi untuk memutar musik');
+      });
+  });
+
+});
+
 
 /* Galeri */
 const gal = $('galeri');
@@ -66,3 +87,4 @@ setInterval(() => {
   $('m').innerText = Math.floor(diff / 60000) % 60;
   $('s').innerText = Math.floor(diff / 1000) % 60;
 }, 1000);
+
